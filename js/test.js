@@ -8,7 +8,17 @@ window.onload = function() {
     if (ajax.readyState == 4 ) {
       // HTTPステータスコードをチェック
       if ( (ajax.status >= 200 && ajax.status < 300) || (ajax.status == 304))  {
-        document.getElementById('output').innerHTML = ajax.responseText;
+        
+        var data = ajax.responseXML;
+
+        var chapters = data.getElementsByTagName('chapter');
+        var str = '';
+
+        for (var i = 0, count = chapters.length; i < count; i++) {
+          str += chapters[i].getAttribute('id') + '章 : ' + chapters[i].firstChild.nodeValue + '<br>';
+        }
+        
+        document.getElementById('output').innerHTML = str;
       } else {
         document.getElementById('output').innerHTML = ajax.statusText;
       }
@@ -16,7 +26,7 @@ window.onload = function() {
   }
 
   document.getElementById('btn').onclick = function() {
-    ajax.open('GET', 'resources/test.txt', true);
+    ajax.open('GET', 'resources/text.xml', true);
     ajax.send(null);
   }
 
